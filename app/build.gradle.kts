@@ -1,16 +1,21 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+
+
+
 }
 
 android {
     namespace = "com.example.board"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.board"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -66,4 +71,20 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    //room
+    implementation("androidx.room:room-runtime:2.4.0")
+    implementation("androidx.room:room-ktx:2.4.0")
+    
+    androidTestImplementation("androidx.room:room-testing:2.4.0")
+
+    //recyclerview
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
+
+    //io.coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
+
+
+
 }
