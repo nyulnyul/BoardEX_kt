@@ -3,6 +3,7 @@ package com.example.board
 import android.graphics.fonts.FontStyle
 import android.os.Bundle
 import android.util.Log
+import android.webkit.WebView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -50,6 +51,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
 import com.example.board.ui.theme.BoardTheme
 
@@ -58,7 +60,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent { //실제 앱 실행 시
             BoardTheme {
-                MyCR2()
+                MyWebview("https://www.youtube.com")
             }
         }
     }
@@ -454,6 +456,15 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+    }
+
+    @Composable
+    fun MyWebview(url : String){
+        AndroidView(factory = {//안드로이드 뷰 사용
+            WebView(it).apply{//웹뷰 생성
+                loadUrl(url)//웹뷰에 url 로드
+            }
+        })
     }
 
 
