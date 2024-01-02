@@ -25,6 +25,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -354,13 +356,15 @@ class MainActivity : ComponentActivity() {
                 .padding(20.dp)
                 .background(Color.Cyan)
                 .border(border = BorderStroke(5.dp, color = Color.Blue)),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally //가운데 정렬
         ) {
-            Box(modifier = Modifier.padding(top = 20.dp)){
+            Box(modifier = Modifier.padding(top = 20.dp)) {
                 Image(
                     painter = painterResource(id = R.drawable.mc),
                     contentDescription = "mc",
-                    modifier = Modifier.size(100.dp).clip(RoundedCornerShape(50.dp))
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(RoundedCornerShape(50.dp))
                 )
             }
             Text(
@@ -376,7 +380,7 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.padding(top = 10.dp),
                 color = Color.Black,
             )
-            Row(modifier = Modifier.fillMaxWidth()){
+            Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = "순위",
                     fontSize = 15.sp,
@@ -392,7 +396,7 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
-            Row(modifier = Modifier.fillMaxWidth()){
+            Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = "감독",
                     fontSize = 15.sp,
@@ -407,7 +411,7 @@ class MainActivity : ComponentActivity() {
                     color = Color.Black,
                 )
             }
-            Row(modifier = Modifier.fillMaxWidth()){
+            Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = "주장",
                     fontSize = 15.sp,
@@ -427,12 +431,42 @@ class MainActivity : ComponentActivity() {
 
     }
 
+    @Composable
+    fun cards(txt : String) {
+        Card(
+            modifier = Modifier //카드 크기
+                .fillMaxWidth()
+                .height(100.dp)
+                .padding(10.dp),
+            shape = RoundedCornerShape(80.dp),//카드 모서리 둥글게
+            border = BorderStroke(5.dp, Color.Blue), //카드 테두리
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)//카드 그림자
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Cyan),
+                contentAlignment = Alignment.Center //카드 안에 있는 내용 가운데 정렬
+            ) {
+                Text(text = txt, fontSize = 30.sp)
+
+
+            }
+        }
+
+    }
+
+
     @Preview(showBackground = true) //디자인 작업시 프리뷰 부분
     @Composable
     fun GreetingPreview() {
         BoardTheme {
+            Column(){
+                cards("안녕")
+                cards("하이")
+                cards("곤니찌와")
+            }
 
-            MyCR2()
         }
     }
 }
