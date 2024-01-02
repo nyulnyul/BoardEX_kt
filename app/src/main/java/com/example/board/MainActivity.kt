@@ -60,6 +60,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -80,21 +81,35 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.example.board.data.local.MyApi
+import com.example.board.data.local.RetrofitInstance
 import com.example.board.ui.theme.BoardTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent { //실제 앱 실행 시
             BoardTheme {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    myNav2()
+                val coroutineScope = rememberCoroutineScope() //스레드를 만들어 처리하는 코루틴
+                val retrofitInstance = RetrofitInstance.getInstance().create(MyApi::class.java) //retrofit 인스턴스 생성
 
-                }
+               Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                   Button(onClick = {
+                       coroutineScope.launch { val response = retrofitInstance.getPost1()
+                       Log.d("TAG", "onCreate: ${response.toString()}")
+                       }
+                   }){
+                       Text(text = "API 버튼")
+                   }
+               }
             }
         }
     }
 
+
+
+    // https://jsonlaceholder.typicode.com/posts/1
     @Composable
     fun myText() {
 
@@ -964,11 +979,11 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun GreetingPreview() {
         BoardTheme {
-            Column(modifier = Modifier.padding(20.dp)) {
-                MyShowHideEx1()
-                MyShowHideEx2()
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                Button(onClick = {}){
+                    Text(text = "API 버튼")
+                }
             }
-
 
         }
     }

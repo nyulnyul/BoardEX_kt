@@ -1,11 +1,9 @@
 package com.example.board.domain.model
 
-data class Post(
+data class Post( //data class is used to store data
+    val userId: Int,
     val id: Int,
     val title: String,
-    val content: String,
-    val author: String,
-    val createdAt: String,
-    val updatedAt: String,
-    val deletedAt: String
+    val body: String,
+
 )
