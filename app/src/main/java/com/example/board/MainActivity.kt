@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,8 +34,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -43,11 +47,15 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -56,7 +64,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,6 +76,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -92,12 +103,24 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent { //실제 앱 실행 시
             BoardTheme {
-                InsertInputData()
+
             }
         }
     }
 
-
+    @Composable
+    fun MyCanvas() {
+        Box(modifier = Modifier.fillMaxWidth().height(500.dp).background(Color.Red)){
+            Canvas(modifier = Modifier.size(200.dp).align(Alignment.Center)) {
+                drawCircle(color = Color.Red , radius = size.maxDimension / 10)
+            }
+        }
+//        Box(modifier = Modifier.size(50.dp).background(Color.Green)){
+//            Canvas(modifier = Modifier.fillMaxSize()) {
+//                drawCircle(color = Color.Red , radius = size.maxDimension / 10)
+//            }
+//        }
+    }
 
     @Composable
     fun myText() {
@@ -965,6 +988,152 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun MyDrawer() {
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+        val scope = rememberCoroutineScope()
+
+        val screens = listOf(
+            Screen.Home,
+            Screen.Setting,
+            Screen.Phone,
+            Screen.Search,
+            Screen.Lock
+        )
+        val selectedScreen: MutableState<Screen> = remember {
+            mutableStateOf(Screen.Home)
+        }
+        Scaffold(
+            topBar = {
+                TopAppBar(title = { Text(text = "MyDrawer") },
+                    navigationIcon = {
+                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
+                            Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+                        }
+                    }
+                )
+            }
+        ) { paddingValues ->
+            ModalNavigationDrawer(
+                drawerState = drawerState,
+                modifier = Modifier.padding(paddingValues),
+                drawerContent = {
+                    ModalDrawerSheet {
+                        screens.forEach {
+                            NavigationDrawerItem(
+                                icon = { Icon(it.icon, contentDescription = it.name) },
+                                label = { Text(text = it.name) },
+                                selected = it == selectedScreen.value,
+                                onClick = {
+                                    scope.launch { drawerState.close() }
+                                    selectedScreen.value = it
+                                })
+                        }
+                    }
+                },
+                content = {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(20.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        when (selectedScreen.value) {
+                            Screen.Home -> HomeScreen()
+                            Screen.Setting -> SettingScreen()
+                            Screen.Phone -> PhoneScreen()
+                            Screen.Search -> SearchScreen()
+                            Screen.Lock -> LockScreen()
+                        }
+                    }
+
+                }
+            )
+        }
+
+    }
+
+    @Composable
+    fun HomeScreen() {
+        Text(text = "HomeScreen")
+    }
+
+    @Composable
+    fun SettingScreen() {
+        Text(text = "SettingScreen")
+    }
+
+    @Composable
+    fun PhoneScreen() {
+        Text(text = "SettingScreen")
+    }
+
+    @Composable
+    fun SearchScreen() {
+        Text(text = "SettingScreen")
+    }
+
+    @Composable
+    fun LockScreen() {
+        Text(text = "SettingScreen")
+    }
+
+    sealed class Screen(val name: String, val icon: ImageVector) {
+        object Home : Screen("Home", Icons.Default.Home)
+        object Setting : Screen("Setting", Icons.Default.Settings)
+        object Phone : Screen("Phone", Icons.Default.Call)
+        object Search : Screen("Search", Icons.Default.Search)
+        object Lock : Screen("Lock", Icons.Default.Lock)
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun MyDialog() {
+        var dialogFlag by remember { mutableStateOf(false) } //다이얼로그 상태값
+        var inputText by remember { mutableStateOf("") } //입력값
+
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(onClick = { dialogFlag = true }) {
+                Text(text = "다이얼로그")
+            }
+            if (dialogFlag) {
+                AlertDialog(
+                    onDismissRequest = { },
+                    title = { Text("Dialog Title") },
+                    text = {
+                           TextField(
+                            value = inputText,
+                            onValueChange = { inputText = it },
+                            label = { Text("입력칸") })
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = { dialogFlag = false },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
+                        ) { Text("ok") }
+                    },
+                    dismissButton = {
+                        Button(
+                            onClick = { dialogFlag = false },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Red)
+                        ) { Text("no") }
+                    },
+                )
+            }
+            if(inputText.isNotEmpty()){
+                Text(text="입력된 값은 : $inputText",fontSize = 40.sp, lineHeight = 50.sp)
+            }
+
+        }
+    }
+
+
     @Preview(showBackground = true) //디자인 작업시 프리뷰 부분
     @Composable
     fun GreetingPreview() {
@@ -978,6 +1147,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InsertInputData() {
@@ -992,10 +1162,13 @@ fun InsertInputData() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TextField(value = inputNumber, onValueChange = {inputNumber = it},label = { Text("숫자를 입력하세요") })
+        TextField(
+            value = inputNumber,
+            onValueChange = { inputNumber = it },
+            label = { Text("숫자를 입력하세요") })
         Button(onClick = {
             val number = inputNumber.toIntOrNull()
-            if(number != null){
+            if (number != null) {
                 coroutineScope.launch {
                     post = getPostData(number)
                 }
@@ -1006,7 +1179,7 @@ fun InsertInputData() {
             Text(text = "API 받아오기")
 
         }
-        post?.let{
+        post?.let {
             Text(text = "userId : ${it.userId}")
             Text(text = "ID : ${it.id}")
             Text(text = "Title : ${it.title}")
@@ -1015,10 +1188,10 @@ fun InsertInputData() {
     }
 
 
-
 }
-private suspend fun getPostData(number : Int) : Post?{
+
+private suspend fun getPostData(number: Int): Post? {
     val retrofitInstance = RetrofitInstance.getInstance().create(MyApi::class.java)
     val response = retrofitInstance.getPostNumber(number)
-    return if(response.isSuccessful) response.body() else null
+    return if (response.isSuccessful) response.body() else null
 }
