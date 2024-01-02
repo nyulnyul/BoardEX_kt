@@ -24,6 +24,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialogDefaults.containerColor
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonDefaults.buttonColors
@@ -31,11 +40,17 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -55,6 +70,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.AsyncImage
 import com.example.board.ui.theme.BoardTheme
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -499,30 +515,101 @@ class MainActivity : ComponentActivity() {
             border = BorderStroke(5.dp, Color.Red), //테두리
             contentColor = Color.Blue
         ) {
-            Column(modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp),
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(20.dp),
                 verticalArrangement = Arrangement.Center,//세로 정렬
                 horizontalAlignment = Alignment.CenterHorizontally //가운데 정렬
             ) {
-                Surface(modifier = Modifier.size(200.dp), //사이즈
-                    color = Color.Red) {
+                Surface(
+                    modifier = Modifier.size(200.dp), //사이즈
+                    color = Color.Red
+                ) {
                     Text("this is compose")
 
                 }
-                Spacer(modifier =Modifier.height((20.dp))) //간격
+                Spacer(modifier = Modifier.height((20.dp))) //간격
                 Text("this is compose")
             }
 
         }
     }
 
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun MyScaffold() {
+        Scaffold(
+            topBar = { MyTopBar() },
+            floatingActionButton = { MyFloationActionButton() },
+            bottomBar = { MyBottomBar() }
+
+
+        ) { paddingValues -> //패딩값을 주어 탑바부분에 안가려지고 밑으로 내려줌
+            Surface(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                Text(text = "this is compose")
+
+            }
+
+        }
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Composable
+    fun MyTopBar() {
+        TopAppBar(
+            title = { Text(text = "TopBar") },
+            navigationIcon = {
+                IconButton(onClick = { /*TODO*/ }) {
+
+                    Icon(Icons.Default.AccountCircle, contentDescription = "account")
+
+                }
+            },
+            actions = {
+                Button(onClick = { /*TODO*/ }) {
+                    Text(text = "버튼")
+                }
+            },
+            colors = TopAppBarDefaults.smallTopAppBarColors(Color.Red)
+        )
+    }
+
+    @Composable
+    fun MyFloationActionButton() {
+        FloatingActionButton(onClick = { /*TODO*/ }) {
+            Icon(Icons.Default.Menu, contentDescription = "Menu")
+        }
+    }
+
+    @Composable
+    fun MyBottomBar(){
+        BottomAppBar(containerColor = Color.Red){
+            Row(modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween) {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(Icons.Default.Home, contentDescription = "Menu")
+                }
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(Icons.Default.Call, contentDescription = "Menu")
+                }
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(Icons.Default.Settings, contentDescription = "Menu")
+                }
+
+            }
+        }
+    }
 
     @Preview(showBackground = true) //디자인 작업시 프리뷰 부분
     @Composable
     fun GreetingPreview() {
         BoardTheme {
-            mySurface2()
+            MyScaffold()
 
         }
     }
