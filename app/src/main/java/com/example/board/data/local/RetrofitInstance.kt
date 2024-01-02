@@ -1,5 +1,6 @@
 package com.example.board.data.local
 
+import com.example.board.domain.model.Post
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -11,3 +12,4 @@ object RetrofitInstance {
         return client
     }
 }
+

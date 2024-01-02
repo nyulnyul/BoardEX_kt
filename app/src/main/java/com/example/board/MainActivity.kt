@@ -83,6 +83,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.board.data.local.MyApi
 import com.example.board.data.local.RetrofitInstance
+import com.example.board.domain.model.Post
 import com.example.board.ui.theme.BoardTheme
 import kotlinx.coroutines.launch
 
@@ -91,25 +92,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent { //실제 앱 실행 시
             BoardTheme {
-                val coroutineScope = rememberCoroutineScope() //스레드를 만들어 처리하는 코루틴
-                val retrofitInstance = RetrofitInstance.getInstance().create(MyApi::class.java) //retrofit 인스턴스 생성
-
-               Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-                   Button(onClick = {
-                       coroutineScope.launch { val response = retrofitInstance.getPost1()
-                       Log.d("TAG", "onCreate: ${response.toString()}")
-                       }
-                   }){
-                       Text(text = "API 버튼")
-                   }
-               }
+                InsertInputData()
             }
         }
     }
 
 
 
-    // https://jsonlaceholder.typicode.com/posts/1
     @Composable
     fun myText() {
 
@@ -926,6 +915,7 @@ class MainActivity : ComponentActivity() {
         }
 
     }
+
     @Composable
     fun myNav2() {
         val navController = rememberNavController()
@@ -953,7 +943,7 @@ class MainActivity : ComponentActivity() {
                         .fillMaxWidth()
                         .height(100.dp)
                         .border(1.dp, Color.Black)
-                        .clickable{
+                        .clickable {
                             navController.navigate("MyNumberScreen/${number}")
                         }
                 ) {
@@ -969,8 +959,8 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun MyNumberScreen(number : String?){
-        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()){
+    fun MyNumberScreen(number: String?) {
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
             Text(text = number.toString(), fontSize = 70.sp)
         }
     }
@@ -979,12 +969,56 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun GreetingPreview() {
         BoardTheme {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
-                Button(onClick = {}){
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Button(onClick = {}) {
                     Text(text = "API 버튼")
                 }
             }
 
         }
     }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun InsertInputData() {
+    var inputNumber by remember { mutableStateOf("") }
+    var post by remember {
+        mutableStateOf<Post?>(null)
+    }
+    val coroutineScope = rememberCoroutineScope() //스레드를 만들어 처리하는 코루틴
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        TextField(value = inputNumber, onValueChange = {inputNumber = it},label = { Text("숫자를 입력하세요") })
+        Button(onClick = {
+            val number = inputNumber.toIntOrNull()
+            if(number != null){
+                coroutineScope.launch {
+                    post = getPostData(number)
+                }
+            }
+
+
+        }) {
+            Text(text = "API 받아오기")
+
+        }
+        post?.let{
+            Text(text = "userId : ${it.userId}")
+            Text(text = "ID : ${it.id}")
+            Text(text = "Title : ${it.title}")
+            Text(text = "Body : ${it.body}")
+        }
+    }
+
+
+
+}
+private suspend fun getPostData(number : Int) : Post?{
+    val retrofitInstance = RetrofitInstance.getInstance().create(MyApi::class.java)
+    val response = retrofitInstance.getPostNumber(number)
+    return if(response.isSuccessful) response.body() else null
 }
