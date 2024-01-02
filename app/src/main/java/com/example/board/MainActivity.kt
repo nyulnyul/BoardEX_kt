@@ -42,11 +42,13 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -591,10 +593,12 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun MyBottomBar(){
-        BottomAppBar(containerColor = Color.Red){
-            Row(modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween) {
+    fun MyBottomBar() {
+        BottomAppBar(containerColor = Color.Red) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 IconButton(onClick = { /*TODO*/ }) {
                     Icon(Icons.Default.Home, contentDescription = "Menu")
                 }
@@ -610,33 +614,151 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun mylazyColumn(){ //필요한 부분만 천천히 로드해 메모리 사용을 줄여주는 lazyrow,lazycolmnu
-        val textList = listOf("1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6","7","8","9","10",)
+    fun mylazyColumn() { //필요한 부분만 천천히 로드해 메모리 사용을 줄여주는 lazyrow,lazycolmnu
+        val textList = listOf(
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+        )
 
-        LazyColumn{
-            items(textList){item -> Text(text = item,fontSize = 30.sp, modifier = Modifier.fillMaxWidth()) }
-
+        LazyColumn {
+            items(textList) { item ->
+                Text(
+                    text = item,
+                    fontSize = 30.sp,
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
-        }
-    @Composable
-    fun mylazyRow(){ //필요한 부분만 천천히 로드해 메모리 사용을 줄여주는 lazyrow,lazycolmnu
-        val textList = listOf("1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6","7","8","9","10",)
-
-        LazyRow{
-           items(textList){
-               item -> Text(text = item, fontSize = 100.sp, modifier = Modifier.clickable{println("Clicked item : $item")})
-           }
 
         }
     }
 
+    @Composable
+    fun mylazyRow() { //필요한 부분만 천천히 로드해 메모리 사용을 줄여주는 lazyrow,lazycolmnu
+        val textList = listOf(
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+        )
+
+        LazyRow {
+            items(textList) { item ->
+                Text(
+                    text = item,
+                    fontSize = 100.sp,
+                    modifier = Modifier.clickable { println("Clicked item : $item") }) //클릭시 이벤트
+            }
+
+        }
+    }
+
+    @Composable
+    fun MyProgress() {
+        var progress by remember { mutableStateOf(0.1f) } //상태값 저장
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(onClick = {
+                if(progress < 1.0f)
+                progress += 0.1f
+            }) {
+                Text(text = "코딩력", fontSize = 30.sp)
+            }
+            Spacer(modifier = Modifier.size(30.dp))
+            LinearProgressIndicator(
+                progress = progress, //진행률
+                modifier = Modifier.height(10.dp), //높이
+                color = Color.Red, //진행색
+                trackColor = Color.Green //배경색
+            )
+            Spacer(modifier = Modifier.size(30.dp))
+            CircularProgressIndicator(progress = progress, modifier = Modifier.size(100.dp))
+
+        }
+    }
 
 
     @Preview(showBackground = true) //디자인 작업시 프리뷰 부분
     @Composable
     fun GreetingPreview() {
         BoardTheme {
-            mylazyRow()
+            MyProgress()
 
         }
     }
