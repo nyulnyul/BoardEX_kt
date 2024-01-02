@@ -6,18 +6,23 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.Divider
@@ -34,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -50,7 +56,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent { //실제 앱 실행 시
             BoardTheme {
-                BoxEx()
+                MyCR2()
             }
         }
     }
@@ -245,7 +251,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 Text(text = "Box1", color = Color.Black)
             }
-            Button(onClick = {}, modifier = Modifier.align(Alignment.CenterStart)){
+            Button(onClick = {}, modifier = Modifier.align(Alignment.CenterStart)) {
                 Text(text = "중앙 좌측")
 
             }
@@ -291,25 +297,142 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun MyRow(){
-        Row (modifier = Modifier.fillMaxSize().background(color = Color.Blue),
+    fun MyRow() {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.Blue),
             horizontalArrangement = Arrangement.SpaceEvenly, //간격
             verticalAlignment = Alignment.CenterVertically //정렬
-        ){
-            Text(text ="i1", style = TextStyle(background = Color.Gray), fontSize = 30.sp)
-            Text(text ="i2", style = TextStyle(background = Color.Red), fontSize = 30.sp)
-            Text(text ="i3", style = TextStyle(background = Color.Green), fontSize = 30.sp)
+        ) {
+            Text(text = "i1", style = TextStyle(background = Color.Gray), fontSize = 30.sp)
+            Text(text = "i2", style = TextStyle(background = Color.Red), fontSize = 30.sp)
+            Text(text = "i3", style = TextStyle(background = Color.Green), fontSize = 30.sp)
 
         }
     }
 
-    
+    @Composable
+    fun MyCR() {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp)
+                .background(color = Color.Blue)
+        ) {
+            Text(
+                text = "Hello World!",
+                fontSize = 30.sp,
+                color = Color.Red,
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = "왼쪽")
+
+                Text(text = "중앙")
+//                Spacer(modifier = Modifier.weight(1f))
+                Text(text = "오른쪽")
+
+
+            }
+            Text(
+                text = "Hello World!",
+                fontSize = 30.sp,
+                color = Color.Red,
+            )
+        }
+
+    }
+
+    @Composable
+    fun MyCR2() {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+                .background(Color.Cyan)
+                .border(border = BorderStroke(5.dp, color = Color.Blue)),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(modifier = Modifier.padding(top = 20.dp)){
+                Image(
+                    painter = painterResource(id = R.drawable.mc),
+                    contentDescription = "mc",
+                    modifier = Modifier.size(100.dp).clip(RoundedCornerShape(50.dp))
+                )
+            }
+            Text(
+                text = "Manchestor City",
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 50.dp),
+                color = Color.Black,
+            )
+            Text(
+                text = "EPL",
+                fontSize = 15.sp,
+                modifier = Modifier.padding(top = 10.dp),
+                color = Color.Black,
+            )
+            Row(modifier = Modifier.fillMaxWidth()){
+                Text(
+                    text = "순위",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(10.dp),
+                    color = Color.Black,
+                )
+                Text(
+                    text = "3등",
+                    fontSize = 15.sp,
+                    modifier = Modifier.padding(10.dp),
+                    color = Color.Black,
+                )
+            }
+
+            Row(modifier = Modifier.fillMaxWidth()){
+                Text(
+                    text = "감독",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(10.dp),
+                    color = Color.Black,
+                )
+                Text(
+                    text = "팹 과르디올라",
+                    fontSize = 15.sp,
+                    modifier = Modifier.padding(10.dp),
+                    color = Color.Black,
+                )
+            }
+            Row(modifier = Modifier.fillMaxWidth()){
+                Text(
+                    text = "주장",
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(10.dp),
+                    color = Color.Black,
+                )
+                Text(
+                    text = "케빈 데 브라위너",
+                    fontSize = 15.sp,
+                    modifier = Modifier.padding(10.dp),
+                    color = Color.Black,
+                )
+            }
+
+        }
+
+    }
+
     @Preview(showBackground = true) //디자인 작업시 프리뷰 부분
     @Composable
     fun GreetingPreview() {
         BoardTheme {
 
-            MyRow()
+            MyCR2()
         }
     }
 }
