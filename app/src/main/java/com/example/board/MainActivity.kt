@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -289,12 +290,26 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @Composable
+    fun MyRow(){
+        Row (modifier = Modifier.fillMaxSize().background(color = Color.Blue),
+            horizontalArrangement = Arrangement.SpaceEvenly, //간격
+            verticalAlignment = Alignment.CenterVertically //정렬
+        ){
+            Text(text ="i1", style = TextStyle(background = Color.Gray), fontSize = 30.sp)
+            Text(text ="i2", style = TextStyle(background = Color.Red), fontSize = 30.sp)
+            Text(text ="i3", style = TextStyle(background = Color.Green), fontSize = 30.sp)
+
+        }
+    }
+
+    
     @Preview(showBackground = true) //디자인 작업시 프리뷰 부분
     @Composable
     fun GreetingPreview() {
         BoardTheme {
 
-            BoxEx()
+            MyRow()
         }
     }
 }
