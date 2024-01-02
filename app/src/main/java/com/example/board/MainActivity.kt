@@ -1,6 +1,6 @@
 package com.example.board
 
-import android.graphics.fonts.FontStyle
+
 import android.os.Bundle
 import android.util.Log
 import android.webkit.WebView
@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,16 +25,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.AlertDialogDefaults.containerColor
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -49,10 +48,10 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
@@ -71,19 +70,27 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.board.ui.theme.BoardTheme
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent { //실제 앱 실행 시
             BoardTheme {
-                MyWebview("https://www.youtube.com")
+                Column(modifier = Modifier.fillMaxSize()) {
+                    myNav2()
+
+                }
             }
         }
     }
@@ -735,8 +742,8 @@ class MainActivity : ComponentActivity() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(onClick = {
-                if(progress < 1.0f)
-                progress += 0.1f
+                if (progress < 1.0f)
+                    progress += 0.1f
             }) {
                 Text(text = "코딩력", fontSize = 30.sp)
             }
@@ -754,11 +761,214 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    @Composable
+    fun MyTA1() {
+        Column() {
+            Text(text = "안녕", fontSize = 100.sp, color = Color.Red)
+            Text(text = "곤니찌와", fontSize = 100.sp, color = Color.Red)
+            Text(text = "헬로", fontSize = 100.sp, color = Color.Red)
+        }
+    }
+
+    @Composable
+    fun MyTA2() {
+        Column() {
+            textFormat1("곤니찌와", 100.sp, Color.Red)
+            textFormat1("안녕", 100.sp, Color.Red)
+            textFormat1("헬로", 100.sp, Color.Red)
+
+        }
+    }
+
+    @Composable
+    fun textFormat1(text: String, fontSize: TextUnit, color: Color) { //code editing 방법
+        Text(text = text, fontSize = fontSize, color = color)
+    }
+
+    @Composable
+    fun MyTA3() {
+        Column() {
+            textFormat2 {
+                Text(text = "곤니찌와", fontSize = 100.sp, color = Color.Red)
+
+            }
+
+        }
+    }
+
+    @Composable
+    fun textFormat2(content: @Composable () -> Unit) { //code editing 방법2
+        Column {
+            content()
+            content()
+            content()
+        }
+
+
+    }
+
+    @Composable
+    fun MyShowHideEx1() {
+        var isShow by remember { mutableStateOf(true) }
+
+        Column(
+            modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Button(onClick = { isShow = !isShow }) {
+                Text(text = "보이기/숨기기")
+                if (isShow)
+                    Text(text = "보이기")
+                else
+                    Text(text = "숨기기")
+            }
+            if (isShow) {
+                MyShowHideEx2()
+            }
+        }
+    }
+
+    @Composable
+    fun MyShowHideEx2() {
+        var swState by remember { mutableStateOf(false) }
+        Column(modifier = Modifier.padding(20.dp)) {
+            Switch(checked = swState, onCheckedChange = { swState = it })
+            Text(text = if (swState) "켜짐" else "꺼짐", fontSize = 50.sp)
+
+            if (swState) {
+                Text(text = "짜잔", fontSize = 50.sp)
+            }
+
+        }
+    }
+
+    @Composable
+    fun MyScreen1(navController: NavHostController) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "화면1", fontSize = 50.sp)
+            Button(onClick = { navController.navigate("myScreen2") }) {
+                Text(text = "2번 화면 이동", fontSize = 50.sp)
+
+            }
+
+        }
+
+    }
+
+    @Composable
+    fun MyScreen2(navController: NavHostController) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "화면2", fontSize = 50.sp)
+            Button(onClick = { navController.navigate("myScreen3") }) {
+                Text(text = "3번 화면 이동", fontSize = 50.sp)
+
+            }
+
+        }
+
+    }
+
+    @Composable
+    fun MyScreen3(navController: NavHostController) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "화면3", fontSize = 50.sp)
+            Button(onClick = { navController.navigate("myScreen1") }) {
+                Text(text = "1번 화면 이동", fontSize = 50.sp)
+
+            }
+
+        }
+
+    }
+
+    @Composable
+    fun myNav() {
+        val navController = rememberNavController()
+
+        NavHost(navController = navController, startDestination = "myScreen1") {
+            composable("myScreen1") {
+                MyScreen1(navController = navController)
+            }
+            composable("myScreen2") {
+                MyScreen2(navController = navController)
+            }
+            composable("myScreen3") {
+                MyScreen3(navController = navController)
+            }
+
+        }
+
+    }
+    @Composable
+    fun myNav2() {
+        val navController = rememberNavController()
+
+        NavHost(navController = navController, startDestination = "myGrid") {
+            composable("myGrid") {
+                myGrid(navController = navController)
+            }
+            composable("MyNumberScreen/{number}") {
+                MyNumberScreen(number = it.arguments?.getString("number")) //number값을 받아와 보내줌
+            }
+
+        }
+
+    }
+
+    @Composable
+    fun myGrid(navController: NavHostController) {
+        LazyVerticalGrid(columns = GridCells.Fixed(3), modifier = Modifier.padding(20.dp)) //grid 형태
+        {
+            items(15) { number ->
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .border(1.dp, Color.Black)
+                        .clickable{
+                            navController.navigate("MyNumberScreen/${number}")
+                        }
+                ) {
+                    Text(
+                        text = number.toString(),
+                        fontSize = 30.sp
+                    )
+                }
+            }
+
+
+        }
+    }
+
+    @Composable
+    fun MyNumberScreen(number : String?){
+        Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()){
+            Text(text = number.toString(), fontSize = 70.sp)
+        }
+    }
+
     @Preview(showBackground = true) //디자인 작업시 프리뷰 부분
     @Composable
     fun GreetingPreview() {
         BoardTheme {
-            MyProgress()
+            Column(modifier = Modifier.padding(20.dp)) {
+                MyShowHideEx1()
+                MyShowHideEx2()
+            }
+
 
         }
     }
