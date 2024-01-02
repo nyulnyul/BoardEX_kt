@@ -11,6 +11,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
@@ -605,11 +609,34 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @Composable
+    fun mylazyColumn(){ //필요한 부분만 천천히 로드해 메모리 사용을 줄여주는 lazyrow,lazycolmnu
+        val textList = listOf("1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6","7","8","9","10",)
+
+        LazyColumn{
+            items(textList){item -> Text(text = item,fontSize = 30.sp, modifier = Modifier.fillMaxWidth()) }
+
+            }
+        }
+    @Composable
+    fun mylazyRow(){ //필요한 부분만 천천히 로드해 메모리 사용을 줄여주는 lazyrow,lazycolmnu
+        val textList = listOf("1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6","7","8","9","10","1","2","3","4","5","6","7","8","9","10",)
+
+        LazyRow{
+           items(textList){
+               item -> Text(text = item, fontSize = 100.sp, modifier = Modifier.clickable{println("Clicked item : $item")})
+           }
+
+        }
+    }
+
+
+
     @Preview(showBackground = true) //디자인 작업시 프리뷰 부분
     @Composable
     fun GreetingPreview() {
         BoardTheme {
-            MyScaffold()
+            mylazyRow()
 
         }
     }
