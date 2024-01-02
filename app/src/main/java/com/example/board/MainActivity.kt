@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -434,7 +435,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun cards(txt : String) {
+    fun cards(txt: String) {
         Card(
             modifier = Modifier //카드 크기
                 .fillMaxWidth()
@@ -459,12 +460,61 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun MyWebview(url : String){
+    fun MyWebview(url: String) {
         AndroidView(factory = {//안드로이드 뷰 사용
-            WebView(it).apply{//웹뷰 생성
+            WebView(it).apply {//웹뷰 생성
                 loadUrl(url)//웹뷰에 url 로드
             }
         })
+    }
+
+    //surface란 컨탠츠를 담아놓는 컨테이너
+    // text / button / box/ surface 등
+    @Composable
+    fun mySurface() {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            color = Color.Green,
+            shape = RoundedCornerShape(20.dp), //모서리 둥글게
+            shadowElevation = 20.dp //그림자
+        ) {
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = Color.Green
+                ),//버튼 색상
+            ) {
+                Text(text = "버튼입니다.")
+            }
+        }
+    }
+
+    @Composable
+    fun mySurface2() {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = Color.LightGray,
+            border = BorderStroke(5.dp, Color.Red), //테두리
+            contentColor = Color.Blue
+        ) {
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp),
+                verticalArrangement = Arrangement.Center,//세로 정렬
+                horizontalAlignment = Alignment.CenterHorizontally //가운데 정렬
+            ) {
+                Surface(modifier = Modifier.size(200.dp), //사이즈
+                    color = Color.Red) {
+                    Text("this is compose")
+
+                }
+                Spacer(modifier =Modifier.height((20.dp))) //간격
+                Text("this is compose")
+            }
+
+        }
     }
 
 
@@ -472,11 +522,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun GreetingPreview() {
         BoardTheme {
-            Column(){
-                cards("안녕")
-                cards("하이")
-                cards("곤니찌와")
-            }
+            mySurface2()
 
         }
     }
