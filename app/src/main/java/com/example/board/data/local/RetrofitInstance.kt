@@ -1,6 +1,6 @@
 package com.example.board.data.local
 
-import com.example.board.domain.model.Post
+import com.example.board.domain.model.Posts
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

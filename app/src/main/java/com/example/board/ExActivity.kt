@@ -94,7 +94,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.board.data.local.MyApi
 import com.example.board.data.local.RetrofitInstance
-import com.example.board.domain.model.Post
+import com.example.board.domain.model.Posts
 import com.example.board.ui.theme.BoardTheme
 import kotlinx.coroutines.launch
 
@@ -1190,7 +1190,7 @@ class ExActivity : ComponentActivity() {
 //
 //}
 
-private suspend fun getPostData(number: Int): Post? {
+private suspend fun getPostData(number: Int): Posts? {
     val retrofitInstance = RetrofitInstance.getInstance().create(MyApi::class.java)
     val response = retrofitInstance.getPostNumber(number)
     return if (response.isSuccessful) response.body() else null

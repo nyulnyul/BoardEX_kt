@@ -1,9 +1,13 @@
 package com.example.board.domain.model
 
-data class Post( //data class is used to store data
-    val userId: Int,
-    val id: Int,
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
+data class Posts(
+    @PrimaryKey(autoGenerate = true) val id: Int,
+    val author: String,
     val title: String,
-    val body: String,
+    val content: String,
 
 )
