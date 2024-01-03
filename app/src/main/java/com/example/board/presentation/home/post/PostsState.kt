@@ -1,4 +1,4 @@
-package com.example.board.presentation.home.components
+package com.example.board.presentation.home.post
 
 import com.example.board.domain.model.Posts
 import com.example.board.domain.util.OrderType

@@ -58,14 +58,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.board.ui.activity.PostActivity
-import com.example.board.ui.theme.BoardTheme
+import com.example.board.domain.model.Posts
+import com.example.board.presentation.home.components.PostItem
+import com.example.board.presentation.home.post.PostsEvent
 
+import com.example.board.ui.theme.BoardTheme
+import com.google.android.material.search.SearchBar
 
 
 class MainActivity : ComponentActivity() {
@@ -87,198 +91,10 @@ class MainActivity : ComponentActivity() {
 fun MyBoard() {
     val navController = rememberNavController()
 
-    Scaffold(
-        topBar = { Column {
-            TopLogo()
-            SearchBar()
-        } },
-        floatingActionButton = { floatingButton(navController) }
-    ) { NavCon(navController)
-    }
 }
 
-@Composable
-fun TopLogo() {
-    Box() {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(60.dp), contentAlignment = Alignment.Center
-        ) {
-            Row {
-                Text(
-                    "O",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(5.dp),
-                    color = Color.Blue
-                )
-                Text(
-                    "B",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(5.dp),
-                    color = Color.Blue
-                )
-                Text(
-                    "J",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(5.dp),
-                    color = Color.Blue
-                )
-                Text(
-                    "E",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(5.dp),
-                    color = Color.Black
-                )
-                Text(
-                    "C",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(5.dp),
-                    color = Color.Black
-                )
-                Text(
-                    "T",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(5.dp),
-                    color = Color.Black
-                )
-                Text(
-                    text = "오브젝트 게시판",
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(5.dp),
-                    color = Color.DarkGray
-                )
 
-            }
-        }
-    }
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SearchBar() {
-    var inputText by remember {
-        mutableStateOf("")
-    }
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 20.dp, end = 20.dp)
-            .border(1.dp, Color.Gray, shape = RoundedCornerShape(10.dp))
-    ) {
 
-        TextField(
-            value = inputText,
-            onValueChange = { inputText = it },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = "Search"
-                )
-            },
-            placeholder = { Text(text = "검색어를 입력하세요.") },
-            modifier = Modifier
-                .fillMaxWidth(),
-            colors = TextFieldDefaults.textFieldColors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
-                errorIndicatorColor = Color.Transparent,)
 
-            )
-    }
-}
 
-@Composable
-fun MyBoardList(navController: NavController) {
-    Card(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(20.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
-        shape = RoundedCornerShape(10.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp)
-        ) {
-            LazyList()
-
-        }
-    }
-}
-
-@Composable
-fun floatingButton(navController: NavController) {
-    FloatingActionButton(onClick = { navController.navigate("Posting")
-    }) {
-        Icon(imageVector = Icons.Default.AddCircle, contentDescription = "make")
-    }
-}
-
-@Composable
-fun LazyList() {
-    LazyColumn() {
-        items(10) {
-            Box(modifier = Modifier
-                .padding(10.dp)
-                .clickable(onClick = {})
-            ) {
-                Text(text = "${it}번 게시글", fontSize = 20.sp, fontWeight = FontWeight.Bold)
-
-            }
-
-        }
-    }
-
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun PostInputField(label: String, value: String, onValueChange: (String) -> Unit) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) }
-
-    )
-}
-
-@Composable
-fun Posting(navController: NavController) {
-    var title by remember { mutableStateOf("") }
-    var author by remember { mutableStateOf("") }
-    var content by remember { mutableStateOf("") }
-
-    // UI 레이아웃 구성, 예를 들어 Column 사용
-    Column {
-        PostInputField(label = "제목", value = title, onValueChange = { title = it })
-        PostInputField(label = "작성자", value = author, onValueChange = { author = it })
-        PostInputField(label = "내용", value = content, onValueChange = { content = it })
-
-        Button(onClick = { navController.navigate("MyBoardList") }) {
-            Text("게시")
-        }
-    }
-}
-
-@Composable
-fun NavCon(navController: NavController){
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "MyBoardList" ){
-        composable("MyBoardList"){
-            MyBoardList(navController)
-        }
-        composable("Posting"){
-            Posting(navController)
-        }
-    }
-}

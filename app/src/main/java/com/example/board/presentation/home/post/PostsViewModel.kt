@@ -1,4 +1,4 @@
-package com.example.board.presentation.home.components
+package com.example.board.presentation.home.post
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -34,7 +34,7 @@ class PostsViewModel @Inject constructor(private val postUseCases: PostUseCases)
                 if(state.value.postOrder::class == event.postOrder::class && state.value.postOrder.orderType == event.postOrder.orderType){
                     return
                 }
-                
+
 
             }
 
