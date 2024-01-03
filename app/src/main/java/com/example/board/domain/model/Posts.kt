@@ -5,9 +5,16 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Posts(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int? = null,
     val author: String,
     val title: String,
     val content: String,
+    val timestamp: Long
 
-)
+){
+    companion object{
+
+    }
+}
+
+class InvalidPostsException(message: String): Exception(message)
