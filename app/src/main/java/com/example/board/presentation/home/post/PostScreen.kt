@@ -55,7 +55,7 @@ fun PostScreen(navController: NavController,viewModel: PostsViewModel) {
     Scaffold(
         topBar = { Column {
             TopLogo()
-            com.example.board.SearchBar()
+            SearchBar()
         } },
         floatingActionButton = { FloatingActionButton(onClick = { navController.navigate("Posting")
         }) {

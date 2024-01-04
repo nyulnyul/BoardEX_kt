@@ -1,12 +1,11 @@
+import org.apache.tools.ant.util.JavaEnvUtils.VERSION_1_8
 import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
-
-
-
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -110,20 +109,13 @@ dependencies {
     implementation("androidx.paging:paging-compose:1.0.0-alpha13")
     //compose hilt
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0-alpha03")
-    implementation("com.google.dagger:hilt-android:2.40.5")
+
     kapt("com.google.dagger:hilt-android-compiler:2.40.5")
     implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
-    kapt("androidx.hilt:hilt-compiler:1.0.0")
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
 
-
-
-
-    
-
-
-
-
-
-
-
+}
+kapt {
+    correctErrorTypes = true
 }
